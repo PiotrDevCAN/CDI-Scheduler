@@ -15,7 +15,7 @@ var cfenv = require('cfenv');
 // create a new express server
 var app = express();
 app.get('/', (req, res) => {
-  res.send('CDI Scheduler App');
+	res.send('CDI Scheduler App');
 });
 
 // serve the files out of ./public as our main files
@@ -35,7 +35,7 @@ var rest_url = process.env.rest_url;
 var kpes_url = process.env.kpes_url;
 
 // start server on the specified port and binding host
-app.listen(appEnv.port, '0.0.0.0', function() {
+app.listen(appEnv.port, '0.0.0.0', function () {
 	// print a message when the server starts listening
 	console.log("server starting on " + appEnv.url);
 });
@@ -43,7 +43,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 var schedule = require('node-schedule');
 
 var rule = new schedule.RecurrenceRule();
-rule.hour = [7,10,13,16];
+rule.hour = [7, 10, 13, 16];
 rule.minute = 0;
 
 /*
@@ -243,7 +243,7 @@ var cbnd = schedule.scheduleJob({ month: 9, date: 15, hour:03, minute: 01 }, fun
 	});
 });
 
-var ed = schedule.scheduleJob(rule, function(){
+var ed = schedule.scheduleJob(rule, function () {
 	console.log('About to run vBAC employeeData');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -265,7 +265,7 @@ var ed = schedule.scheduleJob(rule, function(){
 	});
 });
 
-var ecd = schedule.scheduleJob(rule, function(){
+var ecd = schedule.scheduleJob(rule, function () {
 	console.log('About to run vBAC employeeCompleteData');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -287,7 +287,7 @@ var ecd = schedule.scheduleJob(rule, function(){
 	});
 });
 
-var hcr = schedule.scheduleJob(rule, function(){
+var hcr = schedule.scheduleJob(rule, function () {
 	console.log('About to run vBAC Headcount Report');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -309,7 +309,7 @@ var hcr = schedule.scheduleJob(rule, function(){
 	});
 });
 
-var rmb = schedule.scheduleJob(rule, function(){
+var rmb = schedule.scheduleJob(rule, function () {
 	console.log('About to run vBAC Recheck Missing Bands');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -324,6 +324,75 @@ var rmb = schedule.scheduleJob(rule, function(){
 			// console.log(body); // Print the google web page.
 		} else {
 			console.log('Error sending Recheck Missing Bands');
+			console.log(error);
+			console.log(response);
+			// console.log(body);
+		}
+	});
+});
+
+// imports candidates from cFIRST
+var lcc = schedule.scheduleJob(rule, function () {
+	console.log('About to run vBAC Load cFIRST Candidates');
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	console.log('Start time ' + time);
+	var request = require('request');
+	request(vbac_url + 'batchJobs/loadcFIRSTCandidates.php', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log('Load cFIRST Candidates');
+			var today = new Date();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			console.log('Finish time ' + time);
+			// console.log(body); // Print the google web page.
+		} else {
+			console.log('Error sending Load cFIRST Candidates');
+			console.log(error);
+			console.log(response);
+			// console.log(body);
+		}
+	});
+});
+
+// Updates Person Fields from cFIRST
+var upf = schedule.scheduleJob(rule, function () {
+	console.log('About to run vBAC Update Person Fields from cFIRST');
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	console.log('Start time ' + time);
+	var request = require('request');
+	request(vbac_url + 'batchJobs/updatecFIRSTFields.php', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log('Update Person Fields from cFIRST');
+			var today = new Date();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			console.log('Finish time ' + time);
+			// console.log(body); // Print the google web page.
+		} else {
+			console.log('Error sending Update Person Fields from cFIRST');
+			console.log(error);
+			console.log(response);
+			// console.log(body);
+		}
+	});
+});
+
+// Updates Person PES Fields from cFIRST
+var upp = schedule.scheduleJob(rule, function () {
+	console.log('About to run vBAC Update Person PES Fields from cFIRST');
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	console.log('Start time ' + time);
+	var request = require('request');
+	request(vbac_url + 'batchJobs/updatePesFieldsFromcFIRST.php', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log('Update Person PES Fields from cFIRST');
+			var today = new Date();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			console.log('Finish time ' + time);
+			// console.log(body); // Print the google web page.
+		} else {
+			console.log('Error sending Update Person PES Fields from cFIRST');
 			console.log(error);
 			console.log(response);
 			// console.log(body);
@@ -366,7 +435,7 @@ var restAutoClose = schedule.scheduleJob({ hour: 1, minute: 15 }, function () {
 	});
 });
 
-var restSendRFSData = schedule.scheduleJob(rule, function(){
+var restSendRFSData = schedule.scheduleJob(rule, function () {
 	console.log('About to run REST restSendRFSData');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -388,7 +457,7 @@ var restSendRFSData = schedule.scheduleJob(rule, function(){
 	});
 });
 
-var restSendRRData = schedule.scheduleJob(rule, function(){
+var restSendRRData = schedule.scheduleJob(rule, function () {
 	console.log('About to run REST restSendRRData');
 	var today = new Date();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -410,6 +479,7 @@ var restSendRRData = schedule.scheduleJob(rule, function(){
 	});
 });
 
+/*
 var restSendClaimData = schedule.scheduleJob(rule, function(){
 	console.log('About to run REST restSendClaimData');
 	var today = new Date();
@@ -431,7 +501,9 @@ var restSendClaimData = schedule.scheduleJob(rule, function(){
 		}
 	});
 });
+*/
 
+/*
 var restSendVBACClaimData = schedule.scheduleJob(rule, function(){
 	console.log('About to run REST restSendVBACClaimData');
 	var today = new Date();
@@ -453,6 +525,7 @@ var restSendVBACClaimData = schedule.scheduleJob(rule, function(){
 		}
 	});
 });
+*/
 
 /*
 * kPES jobs
