@@ -161,6 +161,22 @@ var updWorkerAPI = schedule.scheduleJob({ hour: 5, minute: 30 }, function () {
 	});
 });
 
+var agileAssignmentValidation = schedule.scheduleJob({ hour: 6, minute: 01 }, function () {
+	console.log('About to run vBAC Agile assignment validation');
+	var request = require('request');
+	request(vbac_url + 'batchJobs/unassignedEmployeesInAgile.php', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log('Agile assignment validation Successful');
+			console.log(body); // Print the google web page.
+		} else {
+			console.log('Agile assignment validation Error');
+			console.log(error);
+			console.log(response);
+			console.log(body);
+		}
+	});
+});
+
 /*
 var ilc = schedule.scheduleJob({hour: 10, minute: 00, dayOfWeek: 5}, function(){
 	console.log('About to run vBAC ilcReminder');
