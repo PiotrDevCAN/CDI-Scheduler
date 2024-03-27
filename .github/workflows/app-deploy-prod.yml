@@ -67,7 +67,7 @@ jobs:
             kps-gd-app-cdisched/data/prod/w3us/openshift-sa NAMESPACE | NAMESPACE
       - name: Login to ARO Cluster
         id: set-aro-context
-        uses: redhat-actions/oc-login@v1
+        uses: redhat-actions/oc-login@v1.2
         with:
           openshift_server_url: ${{ steps.import-secrets.outputs.SERVER_URL }}
           openshift_token: ${{ steps.import-secrets.outputs.SA_TOKEN }}
